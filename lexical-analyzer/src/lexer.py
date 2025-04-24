@@ -2,13 +2,13 @@ def lexical_check(text: str):
     letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZáàéíóú"
     digits = "0123456789"
     punctuation = ".,;:!?()[]{}\"'`´°"
-    specials = "@#$%&*-_+=\\/|<>^~\n\t\r "
+    specials = "@ç#$%&*-_+=\\/|<>^~\n\t\r "
     valid_chars = set(letters + digits + punctuation + specials)
 
     errors = []
     for index, char in enumerate(text):
         if char not in valid_chars:
-            error_msg = f"❌ Lexical error: invalid character '{char}' (code {ord(char)}) at position {index}"
+            error_msg = f"❌ Erro léxico: caracter inválido '{char}' (code {ord(char)}) at position {index}"
             errors.append(error_msg)
 
     if errors:

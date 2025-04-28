@@ -2,7 +2,7 @@ def lexical_check(text: str):
     letters = "abcçdefghijklmnopqrstuvwxyzABCÇDEFGHIJKLMNOPQRSTUVWXYZáàéíóúêãâôõÁÀÉÍÓÚÊÃÂÔÕ"
     digits = "0123456789"
     punctuation = ".,;:!?()[]{}\"'`´°"
-    specials = "@#$%&*-_+=\\/|<>^~\n\t\r "
+    specials = "@#$%&*-_+=\\/|<>^~ "
     valid_chars = set(letters + digits + punctuation + specials)
 
     errors = []

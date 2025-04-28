@@ -1,24 +1,28 @@
-def lexical_check(text: str):
-    letters = "abcçdefghijklmnopqrstuvwxyzABCÇDEFGHIJKLMNOPQRSTUVWXYZáàéíóúêãâôõÁÀÉÍÓÚÊÃÂÔÕ"
-    digits = "0123456789"
-    punctuation = ".,;:!?()[]{}\"'`´°"
-    specials = "@#$%&*-_+=\\/|<>^~ "
-    valid_chars = set(letters + digits + punctuation + specials)
+# from collections import deque
 
-    errors = []
-    for index, char in enumerate(text):
-        if char not in valid_chars:
-            error_msg = f"❌ Erro léxico: caracter inválido '{char}' (code {ord(char)}) at position {index}"
-            errors.append(error_msg)
+# def lexical_check(text: str):
+#     letters = "abcçdefghijklmnopqrstuvwxyzABCÇDEFGHIJKLMNOPQRSTUVWXYZáàéíóúêãâôõÁÀÉÍÓÚÊÃÂÔÕ"
+#     digits = "0123456789"
+#     punctuation = ".,;:!?()[]{}\"'`´°"
+#     specials = "@#$%&*-_+=\\/|<>^~\n\t\r "
+#     valid_chars = set(letters + digits + punctuation + specials)
 
-    if errors:
-        print("Lexical analysis found the following errors:")
-        for error in errors:
-            print(error)
-    else:
-        print("✅ No lexical errors found.")
+#     errors = []
+#     for index, char in enumerate(text):
+#         if char not in valid_chars:
+#             error_msg = f"❌ Erro léxico: caracter inválido '{char}' (code {ord(char)}) at position {index}"
+#             errors.append(error_msg)
 
-# Test
-if __name__ == "__main__":
-    user_input = input("Enter a text for lexical analysis: ")
-    lexical_check(user_input)
+#     if errors:
+#         print("Lexical analysis found the following errors:")
+#         for error in errors:
+#             print(error)
+#         return deque() # Retorna uma fila vazia em caso de erros léxicos
+#     else:
+#         print("✅ No lexical errors found.")
+#         return process_tokens(text)
+
+# # Test
+# if __name__ == "__main__":
+#     user_input = input("Enter a text for lexical analysis: ")
+#     lexical_check(user_input)

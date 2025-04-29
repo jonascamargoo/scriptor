@@ -16,7 +16,7 @@ def lexical_check(text: str):
     errors = []
     for index, char in enumerate(text):
         if char not in valid_chars:
-            error_msg = f"❌ Erro léxico: lexema inválido '{char}' (code {ord(char)}) at position {index}"
+            error_msg = #usar ansi
             errors.append(error_msg)
 
     if errors:
@@ -30,15 +30,6 @@ def lexical_check(text: str):
 
 # https://stackabuse.com/levenshtein-distance-and-text-similarity-in-python/ Relativo ao item 3 do trabalho
 def find_similar_words(word: str, dictionary: list, max_errors: int = 2) -> list:
-    """
-    Returns words from the dictionary that are similar to the input word with a maximum of 'max_errors' 
-    characters of difference based on Levenshtein distance.
-
-    :param word: The word to be checked.
-    :param dictionary: A list of possible words.
-    :param max_errors: The maximum number of allowed character differences (Levenshtein distance).
-    :return: A list of similar words.
-    """
     similar_words = []
     for correct_word in dictionary:
         distance = Levenshtein.distance(word.lower(), correct_word.lower())

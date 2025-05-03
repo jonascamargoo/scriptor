@@ -37,7 +37,6 @@ def download_nltk_resources():
 def load_spacy_model(model_name="pt_core_news_sm"):
     """Tenta carregar um modelo spaCy. Se não estiver instalado, instrui como instalar."""
     try:
-        # Tenta carregar o modelo pequeno para português
         nlp = spacy.load(model_name)
         print(f"{GREEN}Modelo spaCy '{model_name}' carregado com sucesso.{RESET}")
         return nlp

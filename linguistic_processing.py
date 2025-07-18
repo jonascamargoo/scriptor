@@ -1,7 +1,7 @@
 from collections import deque
 import string
 import Levenshtein
-from .config import RED, GREEN, YELLOW, BLUE, RESET
+from config import RED, GREEN, YELLOW, BLUE, RESET
 
 # def get_tokens_for_parser(doc, grammar_keywords: set) -> deque:
 #     """

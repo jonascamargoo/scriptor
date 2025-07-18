@@ -3,9 +3,9 @@ import json
 from collections import deque
 
 # Importa os componentes dos outros módulos
-from .config import GRAMMAR, NON_TERMINALS_VALIDATORS, GREEN, RED, BLUE, RESET, load_spacy_model
-from .linguistic_processing import get_tokens_for_parser, update_symbol_table
-from .syntactic_analyzer import SyntacticAnalyzer
+from config import GRAMMAR, NON_TERMINALS_VALIDATORS, GREEN, RED, BLUE, RESET, load_spacy_model
+from linguistic_processing import get_tokens_for_parser, update_symbol_table
+from syntactic_analyzer import SyntacticAnalyzer
 
 def main_loop():
     """Simula um interpretador de linha de comando usando apenas spaCy."""

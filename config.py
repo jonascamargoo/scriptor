@@ -29,7 +29,7 @@ GRAMMAR = [
             ('KEYWORD', 'documento'),
             ('KEYWORD', 'do'),
             ('KEYWORD', 'autor'),
-            ('<NOME_AUTOR>', 'nome_autor'), # Novo não-terminal
+            ('<NOME_AUTOR>', 'nome_autor'),
             ('KEYWORD', '?')
         ]
     },
@@ -40,7 +40,7 @@ GRAMMAR = [
             ('KEYWORD', 'O'),
             ('KEYWORD', 'autor'),
             ('KEYWORD', 'é'),
-            ('<NOME_AUTOR>', 'nome_autor'), # Novo não-terminal
+            ('<NOME_AUTOR>', 'nome_autor'),
             ('KEYWORD', '.')
         ]
     },

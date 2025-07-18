@@ -2,9 +2,10 @@ import sys
 import json
 import re
 from collections import deque
+from query_generator import generate_query
 
 # Importa os componentes dos outros módulos
-from config import GRAMMAR, NON_TERMINALS_VALIDATORS, GREEN, RED, BLUE, RESET, load_spacy_model
+from config import GRAMMAR, NON_TERMINALS_VALIDATORS, GREEN, RED, BLUE, RESET, YELLOW, load_spacy_model
 from linguistic_processing import get_tokens_for_parser, update_symbol_table
 from syntactic_analyzer import SyntacticAnalyzer
 
@@ -71,10 +72,21 @@ def main_loop():
         
         if ast:
             print(f"{GREEN}--- Análise Sintática OK ---{RESET}")
-            # ... (resto do código)
+            if ast:
+                print(f"{GREEN}--- Análise Sintática OK ---{RESET}")
+                print(f"Mensagem: {message}")
+                print(f"Árvore Sintática Abstrata (AST) gerada:")
+                print(json.dumps(ast, indent=2, ensure_ascii=False))
+
+                # --- NOVA ETAPA: GERAÇÃO DA QUERY ---
+                print(f"\n{BLUE}--- Gerando Query Estruturada ---{RESET}")
+                final_query = generate_query(ast)
+                print(f"Query Final: {YELLOW}{final_query}{RESET}")
+                # ------------------------------------
         else:
             print(f"{RED}--- Erro Sintático ---{RESET}")
             print(f"Mensagem: {message}{RESET}")
             
 if __name__ == "__main__":
     main_loop()
+    

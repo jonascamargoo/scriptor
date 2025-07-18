@@ -22,6 +22,29 @@ GRAMMAR = [
         ]
     },
     {
+        'rule_name': 'pergunta_por_autor',
+        'type': 'pergunta',
+        'pattern': [
+            ('KEYWORD', 'Qual'),
+            ('KEYWORD', 'documento'),
+            ('KEYWORD', 'do'),
+            ('KEYWORD', 'autor'),
+            ('<NOME_AUTOR>', 'nome_autor'), # Novo não-terminal
+            ('KEYWORD', '?')
+        ]
+    },
+    {
+        'rule_name': 'atribuicao_autor',
+        'type': 'atribuicao',
+        'pattern': [
+            ('KEYWORD', 'O'),
+            ('KEYWORD', 'autor'),
+            ('KEYWORD', 'é'),
+            ('<NOME_AUTOR>', 'nome_autor'), # Novo não-terminal
+            ('KEYWORD', '.')
+        ]
+    },
+    {
         'rule_name': 'pergunta_tamanho_documento',
         'type': 'pergunta',
         'pattern': [
@@ -73,7 +96,8 @@ NON_TERMINALS_VALIDATORS = {
     '<TIPO_FORMATO>': ['.pdf', '.txt', '.docx', 'jpeg'],
     '<NOME_ARQUIVO>': ['relatorio.docx', 'imagem.jpeg', 'documento1'],
     '<TITULO_DOCUMENTO>': ['"Relatório Anual"', '"Notas de Aula"'],
-    '<VALOR_TAMANHO>': lambda x: x.isdigit()
+    '<VALOR_TAMANHO>': lambda x: x.isdigit(),
+    '<NOME_AUTOR>': lambda x: x.startswith('"') and x.endswith('"')
 }
 
 

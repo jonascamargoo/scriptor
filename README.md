@@ -1,91 +1,75 @@
-# Analisador Léxico e Tabela de Símbolos para Português
+# Interpretador de Linguagem Natural para Consultas de Documentos
+## 📖 Visão Geral
+Este projeto implementa um interpretador de linguagem natural capaz de traduzir comandos em português para queries estruturadas, utilizadas em Semantic Search. O sistema segue as fases clássicas de um compilador para analisar, interpretar e transformar a entrada do usuário em uma consulta formal que poderia ser usada por um mecanismo de busca de documentos.
 
-Este projeto implementa as fases iniciais de um processador de linguagem natural ou compilador simplificado, focando na análise léxica e na construção de uma tabela de símbolos para textos em português.
+O projeto culmina em uma interface web interativa, construída com Streamlit, que permite aos usuários testar o interpretador de forma visual e didática.
 
-## Funcionalidades Principais
+![alt text](assets/preview.png)
 
-1.  **Verificação e Limpeza Léxica (`lexical_check`):**
-    * Verifica o texto de entrada caractere por caractere contra um conjunto pré-definido de caracteres válidos (letras, dígitos, pontuação, símbolos específicos).
-    * Remove caracteres inválidos do texto.
-    * Reporta quais caracteres foram removidos e suas posições originais.
-    * Passa o texto limpo para a próxima fase.
+## ✨ Funcionalidades Principais
+* Análise de Linguagem Natural: Interpreta comandos em português para identificar a intenção do usuário.
 
-2.  **Tokenização e Fila de Tokens (`tokenize`):**
-    * Utiliza a biblioteca NLTK (`word_tokenize`) para dividir o texto limpo em tokens (palavras e pontuação).
-    * Remove stopwords comuns do português (ex: "eu", "o", "de", "para").
-    * Retorna uma **Fila de Tokens** (`deque`) contendo os tokens relevantes na ordem em que apareceram (exceto stopwords).
+* Análise Sintática Baseada em Gramática: Utiliza um conjunto de regras gramaticais formais para validar a estrutura dos comandos.
 
-3.  **Tabela de Símbolos (`update_symbol_table`):**
-    * Processa a Fila de Tokens para construir e atualizar uma Tabela de Símbolos.
-    * **Filtro Semântico:** Ignora tokens que são puramente pontuação ou números, considerando apenas palavras que provavelmente carregam significado.
-    * **Lematização (Forma Canônica):** Utiliza a biblioteca spaCy (com o modelo `pt_core_news_sm`) para encontrar o lemma (forma base/dicionário) de cada palavra válida. Isso ajuda a agrupar variações (ex: "compilador", "compiladores" -> "compilador").
-    * **Verificação de Similaridade (Levenshtein):** Antes de adicionar um novo lemma à tabela, calcula a distância de Levenshtein entre ele e os lemas já existentes. Se um lemma muito similar (distância <= `similarity_threshold`, padrão 1) já estiver presente, o novo lemma não é adicionado, evitando entradas quasi-duplicadas (ex: "compilador" vs "compiladorez").
-    * **Unicidade e Ordenação:** Garante que cada lemma apareça apenas uma vez e mantém a tabela (uma lista Python) ordenada alfabeticamente.
+* Geração de Queries Estruturadas: Converte os comandos reconhecidos em uma query formal, suportando operadores lógicos AND e OR.
 
-## Conceitos Implementados
+* Diálogo Interativo: Lida com comandos incompletos, solicitando ao usuário as informações faltantes para completar a ação.
 
-* **Análise Léxica:** A primeira fase, que lida com a validação de caracteres e a identificação de unidades básicas (tokens).
-* **Fila de Tokens:** Uma estrutura (`deque`) que armazena a sequência de tokens válidos (sem stopwords) para processamento posterior (ex: análise sintática, não implementada aqui).
-* **Tabela de Símbolos:** Uma estrutura (lista ordenada) que armazena representações únicas e canônicas (lemas) das palavras semanticamente relevantes encontradas no texto.
-* **Lematização vs. Stemming:** Optou-se pela lematização (via spaCy) por produzir formas canônicas mais significativas (palavras reais) do que o stemming (que apenas corta radicais). Isso alinha-se com a ideia de representar conceitos de forma consistente na Tabela de Símbolos.
-[nltk](https://medium.com/turing-talks/uma-an%C3%A1lise-de-dom-casmurro-com-nltk-343d72dd47a7).
-* **Distância de Levenshtein:** Usada como métrica de similaridade para evitar a inserção de lemas que são provavelmente erros de digitação ou variações muito próximas de lemas já existentes na tabela. [Levenshtein](https://github.com/rapidfuzz/Levenshtein)
+* Interface Web Didática: Uma aplicação Streamlit que demonstra o funcionamento do interpretador em tempo real, exibindo a Árvore Sintática Abstrata (AST) e a query final gerada.
 
+## 🏛️ Arquitetura do Projeto
+A arquitetura do sistema foi projetada de forma modular, espelhando as fases de um compilador tradicional. 
 
-### Pipeline spaCy para Lematização
+#### 1. Interface com o Usuário
+A camada de apresentação construída com Streamlit. Ela captura a entrada do usuário e orquestra o pipeline de processamento.
 
-A lematização precisa de contexto gramatical. O spaCy utiliza um pipeline de componentes para isso:
-    * **`tok2vec`**: Gera vetores para os tokens.
-    * **`tagger`**: Atribui a classe gramatical (POS tag - ex: Verbo, Substantivo). Essencial para o lematizador.
-    * **`parser`**: Analisa a estrutura de dependências da frase.
-    * **`attribute_ruler` / `lemmatizer`**: Usa regras e as informações do tagger para determinar o lemma correto.
+#### 2. Análise Léxica
+Recebe o texto bruto do usuário. Utiliza a biblioteca spaCy para tokenizar o texto, ou seja, dividi-lo em unidades léxicas (tokens). Realiza um pré-processamento para limpar a entrada, removendo stopwords (palavras comuns como "o", "de") e tratando pontuações e frases entre aspas para facilitar a análise. A saída é uma Fila de Tokens que alimenta a próxima fase.
 
-## Dependências
+#### 3. Análise Sintática
+O coração do interpretador. Recebe a Fila de Tokens e verifica se a sequência obedece às regras definidas na gramática (config.py). Se um comando corresponde perfeitamente a uma regra, ele constrói e retorna uma Árvore Sintática Abstrata (AST). A AST é representada por um dicionário Python que representa a estrutura e os elementos do comando reconhecido, incluindo o operador lógico (AND/OR) inferido a partir da regra.
 
-* Python 3.x
-* NLTK (`pip install nltk`)
-* spaCy (`pip install spacy`)
-* Modelo de linguagem spaCy para português (`python -m spacy download pt_core_news_sm`)
-* python-Levenshtein (`pip install python-Levenshtein`)
+#### 4. Geração de Query
 
-## Configuração e Instalação
+A fase final. Recebe a AST gerada pelo analisador sintático. Traduz a estrutura da AST para uma string de consulta formal, mapeando os elementos internos (ex: nome_autor) para os campos da query final (ex: Authors).
 
-1.  **Instale as bibliotecas Python:**
-    ```bash
-    pip install nltk spacy python-Levenshtein
-    ```
-2.  **Baixe os recursos NLTK:**
-    O script tenta baixar automaticamente (`punkt`, `stopwords`). Se falhar, execute manualmente em um console Python:
-    ```python
-    import nltk
-    nltk.download('punkt')
-    nltk.download('stopwords')
-    ```
-3.  **Baixe o modelo spaCy:**
-    O script tenta carregar o modelo. Se não estiver instalado, execute no terminal:
-    ```bash
-    python -m spacy download pt_core_news_sm
-    ```
+## 🚀 Como Executar a Aplicação
+Siga os passos abaixo para executar a interface web do interpretador.
 
-## Como Usar
+Pré-requisitos
+Python 3.8 ou superior
 
-1.  Certifique-se de que todas as dependências e modelos estão instalados.
-2.  Execute o script Python (contendo as funções `lexical_check`, `tokenize`, `update_symbol_table` e as inicializações).
-3.  O script processará as frases de exemplo definidas no final do arquivo e imprimirá:
-    * O relatório de limpeza léxica (caracteres inválidos removidos).
-    * A Fila de Tokens resultante (após tokenização e remoção de stopwords).
-    * O processo de atualização da Tabela de Símbolos (mostrando lematização e comparações de similaridade).
-    * A Fila de Tokens final.
-    * A Tabela de Símbolos final (lista ordenada de lemas únicos).
+### 1. Instalação das Dependências
+Primeiro, instale todas as bibliotecas necessárias, incluindo o Streamlit. É recomendado criar um ambiente virtual.
 
-```python
-# Exemplo de como chamar as funções principais
+```Bash
+python -m venv .venv
+source .venv/bin/activate # Em Unix  
+.venv\Scripts\activate # No Windows:
+```
 
-texto_entrada = "Um compilador compila código, compilando rapidamente!"
-fila_tokens = lexical_check(texto_entrada)
-tabela_simbolos_inicial = []
-tabela_simbolos_final = update_symbol_table(fila_tokens, tabela_simbolos_inicial)
+Instale as dependências do arquivo requirements.txt
+```Bash
+pip install -r requirements.txt
 
-print("--- RESULTADO ---")
-print(f"Fila de Tokens: {list(fila_tokens)}")
-print(f"Tabela de Símbolos: {tabela_sim
+```
+
+### 2. Download do Modelo de Linguagem
+O interpretador utiliza um modelo de linguagem da biblioteca spaCy. Faça o download com o seguinte comando:
+
+```Bash
+python -m spacy download pt_core_news_sm
+
+```
+### 3. Executando a Interface
+Com tudo instalado, execute a aplicação Streamlit a partir da pasta raiz do seu projeto.
+
+```Bash
+streamlit run app.py
+```
+Seu navegador será aberto automaticamente com a interface interativa pronta para uso.
+
+### 📋 Exemplos de Comandos Suportados
+A interface possui uma seção de exemplos didáticos. Aqui estão alguns comandos que o interpretador consegue entender:
+
+![alt text](assets/exemples.png)

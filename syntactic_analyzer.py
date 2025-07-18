@@ -18,7 +18,7 @@ class SyntacticAnalyzer:
         """Ponto de entrada do nosso analisador sintático."""
         tokens = list(token_queue)
 
-        # REQUISITO 6: Verifica se estamos esperando uma resposta a uma pergunta anterior
+        # Verifica se estamos esperando uma resposta a uma pergunta anterior
         if self.context['state'] == 'AWAITING_INPUT':
             return self._complete_previous_command(tokens)
 
@@ -34,13 +34,13 @@ class SyntacticAnalyzer:
             match_result, matched_elements = self._match_pattern(tokens, rule['pattern'])
 
             if match_result == 'PERFECT_MATCH':
-                # REQUISITO 1 & 3: Reconheceu a regra e todos os elementos estão presentes
+                # Reconheceu a regra e todos os elementos estão presentes
                 ast = self._build_ast(rule, matched_elements)
                 self.context['state'] = 'IDLE' # Reseta o estado
                 return ast, f"Comando reconhecido com sucesso: {rule['rule_name']}"
 
             if match_result == 'PARTIAL_MATCH':
-                # REQUISITO 5: Falta uma palavra, então perguntamos ao usuário
+                # Falta uma palavra, então perguntamos ao usuário
                 missing_element_type = rule['pattern'][len(tokens)][0]
                 ast = self._build_ast(rule, matched_elements)
 
@@ -48,18 +48,15 @@ class SyntacticAnalyzer:
                 self.context['awaiting_element'] = missing_element_type
                 self.context['incomplete_ast'] = ast
                 
-                # REQUISITO 4: Anota na tabela de símbolos a função reconhecida (implícito no AST)
-                # O AST já contém os elementos reconhecidos e suas funções (ex: 'nome_arquivo': 'relatorio.docx')
                 
                 return None, f"Entendi parcialmente. Qual {missing_element_type} você deseja saber?"
 
-        # REQUISITO 2: Nenhuma regra foi reconhecida
         return None, "Não entendi."
 
     def _complete_previous_command(self, tokens):
         """Tenta completar um comando anterior com a nova entrada do usuário."""
         if not tokens or len(tokens) > 1:
-             # REQUISITO 7: O comando falha novamente
+             # O comando falha novamente
             self.context['state'] = 'IDLE' # Reseta para evitar loop de erro
             return None, "Resposta inválida. Por favor, forneça apenas a informação solicitada."
 
@@ -85,14 +82,14 @@ class SyntacticAnalyzer:
             self.context['state'] = 'IDLE'
             return ast, "Comando completado com sucesso!"
         else:
-            # REQUISITO 7: A resposta ainda não atende à regra
+            # A resposta ainda não atende à regra
             self.context['state'] = 'IDLE' # Reseta
             return None, f"A informação '{user_provided_token}' não é um {element_type_needed} válido. Tente novamente."
 
     def _match_pattern(self, tokens, pattern):
         """Compara uma lista de tokens com um padrão de regra."""
         if len(tokens) > len(pattern):
-            # REQUISITO 4 (excesso): Trata como erro por simplicidade
+            # (excesso): Trata como erro por simplicidade
             return 'NO_MATCH', {}
 
         matched_elements = {}
@@ -115,8 +112,11 @@ class SyntacticAnalyzer:
 
     def _build_ast(self, rule, matched_elements):
         """Constrói uma Árvore Sintática Abstrata (em formato de dicionário)."""
+        logical_operator = 'OR' if 'ou' in rule['rule_name'] else 'AND'
+
         return {
             'type': rule['type'],
             'rule_name': rule['rule_name'],
+            'logical_operator': logical_operator,
             'elements': matched_elements
         }

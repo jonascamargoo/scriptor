@@ -103,7 +103,22 @@ GRAMMAR = [
             ('<TITULO_DOCUMENTO>', 'titulo_documento'),
             ('KEYWORD', '?')
         ]
-    }   
+    },
+    {
+        'rule_name': 'pergunta_titulo_ou_titulo', # O nome da regra indica a lógica OR
+        'type': 'pergunta',
+        'pattern': [
+            ('KEYWORD', 'Qual'),
+            ('KEYWORD', 'documento'),
+            ('KEYWORD', 'tem'),
+            ('KEYWORD', 'título'),
+            ('<TITULO_A>', 'titulo_a'),
+            ('KEYWORD', 'ou'),
+            ('KEYWORD', 'título'),
+            ('<TITULO_B>', 'titulo_b'), 
+            ('KEYWORD', '?')
+        ]
+    }
 ]
 
 # Validadores para os não-terminais da gramática
@@ -111,10 +126,11 @@ NON_TERMINALS_VALIDATORS = {
     '<TIPO_FORMATO>': ['.pdf', '.txt', '.docx', 'jpeg'],
     '<NOME_ARQUIVO>': ['relatorio.docx', 'imagem.jpeg', 'documento1'],
     '<TITULO_DOCUMENTO>': ['"Relatório Anual"', '"Notas de Aula"'],
+    '<TITULO_A>': ['"Relatório Anual"', '"Notas de Aula"', '"Tese Final"'],
+    '<TITULO_B>': ['"Relatório Anual"', '"Notas de Aula"', '"Tese Final"'],
     '<VALOR_TAMANHO>': lambda x: x.isdigit(),
     '<NOME_AUTOR>': lambda x: x.startswith('"') and x.endswith('"')
 }
-
 
 
 def load_spacy_model(model_name="pt_core_news_sm"):

@@ -11,7 +11,9 @@ def generate_query(ast: dict) -> str:
         'titulo_documento': 'Document Title',
         'tipo_formato': 'Format',
         'valor_tamanho': 'Size',
-        'nome_arquivo': 'File Name'
+        'nome_arquivo': 'File Name',
+        'titulo_a': 'Document Title',
+        'titulo_b': 'Document Title',
         # Adicione outros mapeamentos conforme crescimento da gramática
     }
 
@@ -26,6 +28,7 @@ def generate_query(ast: dict) -> str:
     if not query_parts:
         return "Não foi possível gerar uma query (nenhum elemento mapeado)."
 
-    # Por enquanto, vamos juntar todas as partes com "AND"
-    # Este é o ponto onde você pode adicionar lógicas mais complexas (AND/OR)
-    return " AND ".join(query_parts)
+    operator = ast.get('logical_operator', 'AND')
+    return f" {operator} ".join(query_parts)
+
+# Qual documento tem título "Relatório Anual" ou título "Tese Final" ?

@@ -11,17 +11,13 @@ from syntactic_analyzer import SyntacticAnalyzer
 
 def main_loop():
     """Simula um interpretador de linha de comando usando apenas spaCy."""
-    
-    # 1. Setup inicial do modelo spaCy
     nlp = load_spacy_model()
     if nlp is None:
         sys.exit(1)
 
-    # 2. Prepara componentes
     parser = SyntacticAnalyzer(GRAMMAR, NON_TERMINALS_VALIDATORS)
     symbol_table = []
 
-    # Extrai palavras-chave da gramática para não serem removidas como stopwords
     grammar_keywords = {
         value.lower()
         for rule in GRAMMAR

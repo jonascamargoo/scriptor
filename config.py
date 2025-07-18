@@ -88,7 +88,22 @@ GRAMMAR = [
             ('<VALOR_TAMANHO>', 'valor_tamanho'),
             ('KEYWORD', '.')
         ]
-    }
+    }, 
+    {
+        'rule_name': 'pergunta_autor_e_titulo',
+        'type': 'pergunta',
+        'pattern': [
+            ('KEYWORD', 'Qual'),
+            ('KEYWORD', 'documento'),
+            ('KEYWORD', 'do'),
+            ('KEYWORD', 'autor'),
+            ('<NOME_AUTOR>', 'nome_autor'),
+            ('KEYWORD', 'com'),
+            ('KEYWORD', 'título'),
+            ('<TITULO_DOCUMENTO>', 'titulo_documento'),
+            ('KEYWORD', '?')
+        ]
+    }   
 ]
 
 # Validadores para os não-terminais da gramática
@@ -119,3 +134,7 @@ def load_spacy_model(model_name="pt_core_news_sm"):
     except ImportError:
         print(f"{RED}Erro: Biblioteca spaCy não encontrada. Instale com 'pip install spacy'.{RESET}")
         return None
+    
+    
+    
+    # Qual documento do autor "Jonas Camargo" com título "Relatório Final" ?

@@ -4,7 +4,6 @@ import re
 from collections import deque
 from query_generator import generate_query
 
-# Importa os componentes dos outros módulos
 from config import GRAMMAR, NON_TERMINALS_VALIDATORS, GREEN, RED, BLUE, RESET, YELLOW, load_spacy_model
 from linguistic_processing import get_tokens_for_parser, update_symbol_table
 from syntactic_analyzer import SyntacticAnalyzer
@@ -28,6 +27,7 @@ def main_loop():
 
     print("\nInterpretador de Comandos de Documentos (spaCy). Digite 'sair' para terminar.")
     
+    # Fluxo principal do interpretador
     while True:
         # 1. Limpa a entrada para remover espaços extras no início/fim
         user_input = input("> ").strip() 

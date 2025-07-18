@@ -1,6 +1,5 @@
 import spacy
 
-# Cores para o console
 RED = "\033[91m"
 GREEN = "\033[92m"
 YELLOW = "\033[93m"
@@ -105,7 +104,7 @@ GRAMMAR = [
         ]
     },
     {
-        'rule_name': 'pergunta_titulo_ou_titulo', # O nome da regra indica a lógica OR
+        'rule_name': 'pergunta_titulo_ou_titulo',
         'type': 'pergunta',
         'pattern': [
             ('KEYWORD', 'Qual'),
@@ -121,7 +120,6 @@ GRAMMAR = [
     }
 ]
 
-# Validadores para os não-terminais da gramática
 NON_TERMINALS_VALIDATORS = {
     '<TIPO_FORMATO>': ['.pdf', '.txt', '.docx', 'jpeg'],
     '<NOME_ARQUIVO>': ['relatorio.docx', 'imagem.jpeg', 'documento1'],
@@ -152,7 +150,3 @@ def load_spacy_model(model_name="pt_core_news_sm"):
     except ImportError:
         print(f"{RED}Erro: Biblioteca spaCy não encontrada. Instale com 'pip install spacy'.{RESET}")
         return None
-    
-    
-    
-    # Qual documento do autor "Jonas Camargo" com título "Relatório Final" ?

@@ -1,9 +1,6 @@
 import streamlit as st
 import re
 from collections import deque
-
-# Importa os componentes do seu projeto
-# Assumindo que você está executando o app da raiz do projeto
 from config import GRAMMAR, NON_TERMINALS_VALIDATORS, load_spacy_model
 from linguistic_processing import get_tokens_for_parser, update_symbol_table
 from syntactic_analyzer import SyntacticAnalyzer
@@ -120,7 +117,7 @@ if user_input:
         with col2:
             st.subheader("🔍 Query Estruturada Gerada")
             final_query = generate_query(ast)
-            st.code(final_query, language="sql") # Usando 'sql' para um realce de sintaxe agradável
+            st.code(final_query, language="sql")
             
     else:
         st.error(f"Não foi possível interpretar o comando. ({message})")

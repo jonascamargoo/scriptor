@@ -1,21 +1,7 @@
 from collections import deque
 import string
 import Levenshtein
-from config import RED, GREEN, YELLOW, BLUE, RESET
-
-# def get_tokens_for_parser(doc, grammar_keywords: set) -> deque:
-#     """
-#     Extrai tokens de um objeto Doc do spaCy para alimentar o analisador sintático.
-#     - Remove pontuação.
-#     - Remove stopwords, mas preserva palavras-chave da gramática.
-#     """
-#     token_list = [
-#         token.text for token in doc
-#         if (token.lower_ in grammar_keywords or not token.is_stop) and not token.is_punct
-#     ]
-    
-#     print(f"Tokens para o parser (após filtro spaCy): {token_list}")
-#     return deque(token_list)
+from config import GREEN, BLUE, RESET
 
 
 def get_tokens_for_parser(doc, grammar_keywords: set) -> deque:

@@ -31,21 +31,31 @@ def load_dependencies():
     return nlp_model, parser, grammar_keywords
 
 def generate_example_inputs():
-    """Gera frases de exemplo a partir da gramática para fins didáticos."""
+    """
+    Gera frases de exemplo limpas a partir da gramática para fins didáticos,
+    sem espaço extra antes da pontuação final.
+    """
     examples = []
     for rule in GRAMMAR:
-        example = []
+        example_parts = []
         for token_type, value in rule['pattern']:
             if token_type == 'KEYWORD':
-                example.append(value)
+                example_parts.append(value)
             else:
-                # Para não-terminais, usamos um placeholder amigável
-                example.append(f"<{value}>")
-        examples.append(" ".join(example))
+                example_parts.append(f"<{value}>")
+
+        full_example = " ".join(example_parts)
+        clean_example = re.sub(r'\s+([?.])', r'\1', full_example)
+        examples.append(clean_example)
+        
     return examples
+
+
+
 
 def run_interpreter(user_input, nlp, parser, grammar_keywords):
     """Executa o pipeline completo do interpretador."""
+    user_input = re.sub(r'([?.])', r' \1', user_input)
     # Lógica de pré-processamento para aspas
     quoted_phrases = re.findall(r'"[^"]*"', user_input)
     processed_input = re.sub(r'"[^"]*"', 'PLACEHOLDER', user_input)

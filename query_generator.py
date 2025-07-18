@@ -28,5 +28,3 @@ def generate_query(ast: dict) -> str:
 
     operator = ast.get('logical_operator', 'AND')
     return f" {operator} ".join(query_parts)
-
-# Qual documento tem título "Relatório Anual" ou título "Tese Final" ?

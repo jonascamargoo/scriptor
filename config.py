@@ -129,7 +129,9 @@ NON_TERMINALS_VALIDATORS = {
     '<TITULO_A>': ['"Relatório Anual"', '"Notas de Aula"', '"Tese Final"'],
     '<TITULO_B>': ['"Relatório Anual"', '"Notas de Aula"', '"Tese Final"'],
     '<VALOR_TAMANHO>': lambda x: x.isdigit(),
-    '<NOME_AUTOR>': lambda x: x.startswith('"') and x.endswith('"')
+    '<NOME_AUTOR>': lambda x: x.startswith('"') and x.endswith('"'),
+    '<TITULO_A>': lambda x: x.startswith('"') and x.endswith('"'),
+    '<TITULO_B>': lambda x: x.startswith('"') and x.endswith('"')
 }
 
 

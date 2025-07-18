@@ -14,16 +14,14 @@ def generate_query(ast: dict) -> str:
         'nome_arquivo': 'File Name',
         'titulo_a': 'Document Title',
         'titulo_b': 'Document Title',
-        # Adicione outros mapeamentos conforme crescimento da gramática
+    
     }
 
     query_parts = []
     for element_key, value in ast['elements'].items():
-        # Verifica se o elemento da AST tem um campo correspondente na query
         if element_key in field_mapping:
             field_name = field_mapping[element_key]
-            # Formata a parte da query: ("FieldName":"value")
-            query_parts.append(f'("{field_name}":"{value}")')
+            query_parts.append(f'("{field_name}":{value})')
 
     if not query_parts:
         return "Não foi possível gerar uma query (nenhum elemento mapeado)."

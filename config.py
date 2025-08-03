@@ -6,7 +6,7 @@ YELLOW = "\033[93m"
 BLUE = "\033[94m"
 RESET = "\033[0m"
 
-# Definição da gramática formal
+# Definição da gramática formal - devo adicionar os keywords opcionais posteriormente
 GRAMMAR = [
     {
         'rule_name': 'pergunta_localizacao_documento',
@@ -115,6 +115,20 @@ GRAMMAR = [
             ('KEYWORD', 'ou'),
             ('KEYWORD', 'título'),
             ('<TITULO_B>', 'titulo_b'), 
+            ('KEYWORD', '?')
+        ]
+    },
+    {
+        'rule_name': 'pergunta_por_autor_flex',
+        'type': 'pergunta',
+        'pattern': [
+            ('KEYWORD', 'Qual'),
+            ('OPTIONAL_KEYWORD', 'é'),
+            ('OPTIONAL_KEYWORD', 'o'),
+            ('KEYWORD', 'documento'),
+            ('KEYWORD', 'do'),
+            ('KEYWORD', 'autor'),
+            ('<NOME_AUTOR>', 'nome_autor'),
             ('KEYWORD', '?')
         ]
     }

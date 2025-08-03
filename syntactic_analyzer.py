@@ -92,29 +92,73 @@ class SyntacticAnalyzer:
             self.context['state'] = 'IDLE' # Reseta
             return None, f"A informação '{user_provided_token}' não é um {element_type_needed} válido. Tente novamente."
 
-    def _match_pattern(self, tokens, pattern):
-        """Compara uma lista de tokens com um padrão de regra."""
-        if len(tokens) > len(pattern):
-            # (excesso): Trata como erro por simplicidade
-            return 'NO_MATCH', {}
 
+    # def _match_pattern(self, tokens, pattern):
+    #     """Compara uma lista de tokens com um padrão de regra."""
+    #     if len(tokens) > len(pattern):
+    #         # (excesso): Trata como erro por simplicidade
+    #         return 'NO_MATCH', {}
+
+    #     matched_elements = {}
+    #     for i, token in enumerate(tokens):
+    #         pattern_type, pattern_value = pattern[i]
+
+    #         if pattern_type == 'KEYWORD':
+    #             if token.lower() != pattern_value.lower():
+    #                 return 'NO_MATCH', {}
+    #         else: # É um não-terminal
+    #             # Simplificação: consideramos qualquer token aqui como o não-terminal.
+    #             # A validação semântica viria depois.
+    #             element_key = pattern_type.strip('<>').lower()
+    #             matched_elements[element_key] = token
+        
+    #     if len(tokens) == len(pattern):
+    #         return 'PERFECT_MATCH', matched_elements
+    #     else:
+    #         return 'PARTIAL_MATCH', matched_elements
+    
+    def _match_pattern(self, tokens, pattern):
+        """Compara uma lista de tokens com um padrão de regra flexível."""
+        token_idx = 0
+        pattern_idx = 0
         matched_elements = {}
-        for i, token in enumerate(tokens):
-            pattern_type, pattern_value = pattern[i]
+
+        while token_idx < len(tokens) and pattern_idx < len(pattern):
+            pattern_type, pattern_value = pattern[pattern_idx]
 
             if pattern_type == 'KEYWORD':
-                if token.lower() != pattern_value.lower():
-                    return 'NO_MATCH', {}
-            else: # É um não-terminal
-                # Simplificação: consideramos qualquer token aqui como o não-terminal.
-                # A validação semântica viria depois.
+                if tokens[token_idx].lower() == pattern_value.lower():
+                    token_idx += 1
+                    pattern_idx += 1
+                else:
+                    return 'NO_MATCH', {} # Falha se uma palavra-chave obrigatória não for encontrada
+
+            elif pattern_type == 'OPTIONAL_KEYWORD':
+                if tokens[token_idx].lower() == pattern_value.lower():
+                    # A palavra opcional foi encontrada, então consumimos o token
+                    token_idx += 1
+                # Independentemente de encontrar ou não, nós avançamos no padrão,
+                # pois ele era opcional.
+                pattern_idx += 1
+            
+            else: # É um não-terminal (ex: <NOME_AUTOR>)
                 element_key = pattern_type.strip('<>').lower()
-                matched_elements[element_key] = token
-        
-        if len(tokens) == len(pattern):
+                matched_elements[element_key] = tokens[token_idx]
+                token_idx += 1
+                pattern_idx += 1
+
+        # Após o loop, precisamos remover quaisquer OPTIONAL_KEYWORDs restantes no final do padrão
+        # para permitir um match parcial correto.
+        while pattern_idx < len(pattern) and pattern[pattern_idx][0] == 'OPTIONAL_KEYWORD':
+            pattern_idx += 1
+
+        # Verifica o resultado final
+        if token_idx == len(tokens) and pattern_idx == len(pattern):
             return 'PERFECT_MATCH', matched_elements
-        else:
+        elif token_idx == len(tokens) and pattern_idx < len(pattern):
             return 'PARTIAL_MATCH', matched_elements
+        else:
+            return 'NO_MATCH', {}
 
     def _build_ast(self, rule, matched_elements):
         """Constrói uma Árvore Sintática Abstrata (em formato de dicionário)."""

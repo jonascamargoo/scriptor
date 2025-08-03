@@ -16,7 +16,14 @@ def load_dependencies():
         st.error("O modelo spaCy não pôde ser carregado. Siga as instruções no terminal.")
         st.stop()
     
-    parser = SyntacticAnalyzer(GRAMMAR, NON_TERMINALS_VALIDATORS)
+    grouped_grammar = {}
+    for rule in GRAMMAR:
+        first_keyword = rule['pattern'][0][1].lower()
+        if first_keyword not in grouped_grammar:
+            grouped_grammar[first_keyword] = []
+        grouped_grammar[first_keyword].append(rule)
+
+    parser = SyntacticAnalyzer(grouped_grammar, NON_TERMINALS_VALIDATORS)
     
     # Extrai palavras-chave da gramática
     grammar_keywords = {

@@ -29,8 +29,14 @@ class SyntacticAnalyzer:
         """Analisa um comando do zero."""
         if not tokens:
             return None, "Comando vazio."
+        
+        first_token = tokens[0].lower()
+        if first_token not in self.grammar:
+            return None, "Não reconheço este tipo de comando."
+        
+        possible_rules = self.grammar[first_token] 
 
-        for rule in self.grammar:
+        for rule in possible_rules:
             match_result, matched_elements = self._match_pattern(tokens, rule['pattern'])
 
             if match_result == 'PERFECT_MATCH':
